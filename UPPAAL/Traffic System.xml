@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan move, detect_line, line_found, rcv_priority;
+
+int[0,4] spawn = 0
+
+// direction = 1,2,3
+
+// int reserved_direction[id] = 1,2,3,4
+
+// if ((spawn == 1 &amp;&amp; direction == 1) || (spawn == 2 &amp;&amp; direction == 2) || (spawn == 4 &amp;&amp; direction == 3))
+	// reserved_direction[id] = 1
+
+
+// if ((spawn == 1 &amp;&amp; direction == 2) || (spawn == 3 &amp;&amp; direction == 3) || (spawn == 2 &amp;&amp; direction == 1))
+	// reserved_direction[id] = 2
+
+
+// if ((spawn == 1 &amp;&amp; direction == 3) || (spawn == 3 &amp;&amp; direction == 2) || (spawn == 4 &amp;&amp; direction == 1))
+	// reserved_direction[id] = 3
+
+
+// if ((spawn == 2 &amp;&amp; direction == 2) || (spawn == 3 &amp;&amp; direction == 1) || (spawn == 4 &amp;&amp; direction == 3))
+	// reserved_direction[id] = 4
+
+</declaration>
+	<template>
+		<name x="5" y="5">Car</name>
+		<parameter>const id_t id</parameter>
+		<declaration>// Place local declarations here.
+clock wait;</declaration>
+		<location id="id0" x="-1742" y="-1844">
+			<name x="-1802" y="-1878">Direction Assignment</name>
+		</location>
+		<location id="id1" x="-1402" y="-1725">
+			<name x="-1427" y="-1717">Continue</name>
+			<label kind="invariant" x="-1419" y="-1700">x&lt;=15</label>
+		</location>
+		<location id="id2" x="-1682" y="-1725">
+			<name x="-1708" y="-1759">Stop</name>
+			<label kind="invariant" x="-1699" y="-1716">x = 0</label>
+		</location>
+		<location id="id3" x="-1393" y="-1844">
+			<name x="-1452" y="-1878">Move to Destination</name>
+			<label kind="invariant" x="-1403" y="-1827">x&lt;20</label>
+		</location>
+		<location id="id4" x="-1589" y="-1844">
+			<name x="-1648" y="-1878">Priority Assignment</name>
+			<label kind="invariant" x="-1598" y="-1827">x = 0</label>
+		</location>
+		<location id="id5" x="-1844" y="-1844">
+			<name x="-1861" y="-1878">Start</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id5"/>
+			<nail x="-1334" y="-1845"/>
+			<nail x="-1326" y="-1649"/>
+			<nail x="-1853" y="-1649"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id4"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id0"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id4"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-1572" y="-1750">go[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-1716" y="-1810">allowed != 1</label>
+			<label kind="synchronisation" x="-1699" y="-1793">stop[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-1521" y="-1844">allowed == 1</label>
+		</transition>
+	</template>
+	<template>
+		<name>directionAssignment</name>
+		<location id="id6" x="51" y="77">
+			<name x="43" y="43">Right</name>
+		</location>
+		<location id="id7" x="51" y="-8">
+			<name x="41" y="-42">Left</name>
+		</location>
+		<location id="id8" x="-51" y="1">
+			<name x="-61" y="-33">Turn</name>
+		</location>
+		<location id="id9" x="-25" y="-93">
+			<name x="-35" y="-127">Straight</name>
+		</location>
+		<location id="id10" x="-425" y="-8">
+			<name x="-450" y="0">South</name>
+			<committed/>
+		</location>
+		<location id="id11" x="-424" y="69">
+			<name x="-441" y="86">West</name>
+			<committed/>
+		</location>
+		<location id="id12" x="-433" y="-110">
+			<name x="-442" y="-144">East</name>
+			<committed/>
+		</location>
+		<location id="id13" x="-433" y="-204">
+			<name x="-443" y="-238">North</name>
+			<committed/>
+		</location>
+		<location id="id14" x="-586" y="-59">
+			<name x="-603" y="-93">Start</name>
+		</location>
+		<location id="id15" x="-204" y="-59">
+			<name x="-214" y="-93">Assign Dest.</name>
+		</location>
+		<location id="id16" x="238" y="-16">
+			<name x="221" y="-50">Finish</name>
+		</location>
+		<branchpoint id="id17" x="-8" y="26">
+		</branchpoint>
+		<branchpoint id="id18" x="-119" y="-59">
+		</branchpoint>
+		<branchpoint id="id19" x="-509" y="-59">
+		</branchpoint>
+		<init ref="id14"/>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id14"/>
+			<nail x="238" y="127"/>
+			<nail x="-578" y="127"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id16"/>
+			<label kind="assignment" x="111" y="43">direction = 3</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id16"/>
+			<label kind="assignment" x="77" y="-33">direction = 2</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id16"/>
+			<label kind="assignment" x="85" y="-84">direction = 1</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id6"/>
+			<label kind="probability" x="26" y="35">1</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id7"/>
+			<label kind="probability" x="26" y="-25">1</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id17"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id8"/>
+			<label kind="probability" x="-76" y="-42">2</label>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id9"/>
+			<label kind="probability" x="-68" y="-118">1</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id18"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-323" y="-161">spawn = 1</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-365" y="-118">spawn = 2</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-348" y="17">spawn = 4</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-382" y="-51">spawn = 3</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id10"/>
+			<label kind="probability" x="-467" y="-33">1</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id11"/>
+			<label kind="probability" x="-458" y="35">1</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id12"/>
+			<label kind="probability" x="-467" y="-118">1</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id13"/>
+			<label kind="probability" x="-467" y="-204">1</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id19"/>
+		</transition>
+	</template>
+	<template>
+		<name>CentralComs</name>
+		<location id="id20" x="-314" y="76">
+			<committed/>
+		</location>
+		<location id="id21" x="-314" y="-17">
+			<name x="-306" y="-8">Passage Denied</name>
+		</location>
+		<location id="id22" x="-314" y="-127">
+			<name x="-365" y="-161">Passage Granted</name>
+		</location>
+		<init ref="id22"/>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id22"/>
+			<nail x="-195" y="-17"/>
+			<nail x="-195" y="-127"/>
+			<nail x="-297" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id21"/>
+			<nail x="-416" y="-127"/>
+			<nail x="-416" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id20"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id21"/>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+carOne = Car();
+carTwo = Car();
+carThree = Car();
+CarFour = Car();
+// List one or more processes to be composed into a system.
+system carOne, carTwo, carThree, CarFour;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
