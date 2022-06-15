@@ -1,4 +1,5 @@
-# UPPAAL Demo for a First Come First Serve model. This model is intended to be used as a referrence point to its FreeRTOS alternative.
+# UPPAAL Demo for a First Come First Serve model. 
+### This model is intended to be used as a referrence point to its FreeRTOS alternative.
 ### Author: Gordan
 
 Traffic System.xml - proper demo
