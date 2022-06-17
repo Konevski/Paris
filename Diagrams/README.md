@@ -6,7 +6,9 @@
 
 - requirements.png - Gordan
 
-- IntersectionManagement_USE_CASE.jpg - Arsal
-- IntersectionManagemen_Unit_flow_chart.jpg - Arsal
+- IntersectionManagement_USE_CASE.jpg - Arsal //Withdrawn from the project
+- IntersectionManagemen_Unit_flow_chart.jpg - Arsal //Withdrawn from the project
 
 - sequence_diagram_SingleCar.jpeg - Wiktor
+- Intersection Flow Chart.png - Wiktor
+-Intersection Use case.png - Wiktor
