@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int N = 4;         // # of cars
+typedef int[0,N-1] id_t;
+
+int[0,4] list[N];
+
+chan appr[N], go[N], stop[N];</declaration>
+	<template>
+		<name x="5" y="5">Car</name>
+		<parameter>const id_t id</parameter>
+		<declaration>// Place local declarations here.
+
+</declaration>
+		<location id="id0" x="-3264" y="-2796">
+			<name x="-3332" y="-2830">Destination_Reached</name>
+		</location>
+		<location id="id1" x="-3094" y="-2796">
+			<name x="-3137" y="-2822">Drive</name>
+			<committed/>
+		</location>
+		<location id="id2" x="-3094" y="-2873">
+			<name x="-3145" y="-2881">Wait</name>
+		</location>
+		<location id="id3" x="-3264" y="-2949">
+			<name x="-3332" y="-2983">Car_Spawn</name>
+			<committed/>
+		</location>
+		<location id="id4" x="-3094" y="-2949">
+			<name x="-3154" y="-2983">Approaching_Line</name>
+		</location>
+		<location id="id5" x="-3264" y="-2890">
+			<name x="-3307" y="-2873">Start_Automata</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-3086" y="-2847">go[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-3086" y="-2932">stop[id]?</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-3205" y="-2949">appr[id]!</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id3"/>
+		</transition>
+	</template>
+	<template>
+		<name>directionAssignment</name>
+		<declaration>// Place local declarations here.
+
+int[0,4] spawnLoc = 0;
+
+int[0,3] direction = 0;
+
+int[0,4] reserved = 0;
+
+void reserve()
+{
+    if ((spawnLoc == 1 &amp;&amp; direction == 1) || (spawnLoc == 2 &amp;&amp; direction == 2) || (spawnLoc == 4 &amp;&amp; direction == 3))
+        reserved = 1;
+
+    if ((spawnLoc == 1 &amp;&amp; direction == 2) || (spawnLoc == 3 &amp;&amp; direction == 3) || (spawnLoc == 2 &amp;&amp; direction == 1))
+    	reserved = 2;
+
+
+    if ((spawnLoc == 1 &amp;&amp; direction == 3) || (spawnLoc == 3 &amp;&amp; direction == 2) || (spawnLoc == 4 &amp;&amp; direction == 1))
+    	reserved = 3;
+
+
+    if ((spawnLoc == 2 &amp;&amp; direction == 2) || (spawnLoc == 3 &amp;&amp; direction == 1) || (spawnLoc == 4 &amp;&amp; direction == 3))
+	    reserved = 4;
+
+}
+
+void setCarDest(id_t element)
+{
+        list[element] = reserved;
+}
+</declaration>
+		<location id="id6" x="365" y="-187">
+			<name x="348" y="-221">Reset</name>
+			<committed/>
+		</location>
+		<location id="id7" x="229" y="-187">
+			<name x="212" y="-221">Set</name>
+			<committed/>
+		</location>
+		<location id="id8" x="51" y="77">
+			<name x="43" y="43">Right</name>
+			<committed/>
+		</location>
+		<location id="id9" x="51" y="-8">
+			<name x="41" y="-42">Left</name>
+			<committed/>
+		</location>
+		<location id="id10" x="-51" y="1">
+			<name x="-61" y="-33">Turn</name>
+			<committed/>
+		</location>
+		<location id="id11" x="-25" y="-93">
+			<name x="-35" y="-127">Straight</name>
+			<committed/>
+		</location>
+		<location id="id12" x="-391" y="-8">
+			<name x="-416" y="0">South</name>
+			<committed/>
+		</location>
+		<location id="id13" x="-424" y="69">
+			<name x="-441" y="86">West</name>
+			<committed/>
+		</location>
+		<location id="id14" x="-433" y="-110">
+			<name x="-442" y="-144">East</name>
+			<committed/>
+		</location>
+		<location id="id15" x="-433" y="-204">
+			<name x="-443" y="-238">North</name>
+			<committed/>
+		</location>
+		<location id="id16" x="-586" y="-59">
+			<name x="-603" y="-93">Start</name>
+		</location>
+		<location id="id17" x="-204" y="-59">
+			<name x="-204" y="-93">Assign_Dest</name>
+			<committed/>
+		</location>
+		<location id="id18" x="238" y="-16">
+			<name x="221" y="0">Reserve_Direction</name>
+			<committed/>
+		</location>
+		<branchpoint id="id19" x="-8" y="26">
+		</branchpoint>
+		<branchpoint id="id20" x="-119" y="-59">
+		</branchpoint>
+		<branchpoint id="id21" x="-509" y="-59">
+		</branchpoint>
+		<init ref="id16"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id16"/>
+			<label kind="assignment" x="-280" y="110">spawnLoc := 0, direction := 0, reserved := 0</label>
+			<nail x="365" y="25"/>
+			<nail x="365" y="110"/>
+			<nail x="-586" y="110"/>
+			<nail x="-586" y="85"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<label kind="guard" x="-42" y="-170">direction == 0</label>
+			<nail x="204" y="-59"/>
+			<nail x="93" y="-144"/>
+			<nail x="93" y="-144"/>
+			<nail x="-110" y="-144"/>
+			<nail x="-110" y="-76"/>
+			<nail x="-136" y="-59"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="select" x="246" y="-230">e:id_t</label>
+			<label kind="assignment" x="246" y="-213">setCarDest(e)</label>
+			<nail x="348" y="-187"/>
+		</transition>
+		<transition>
+			<source ref="id18"/>
+			<target ref="id7"/>
+			<label kind="assignment" x="221" y="-85">reserve()</label>
+			<nail x="195" y="-119"/>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-612" y="-238">spawnLoc == 0</label>
+			<nail x="-280" y="-238"/>
+			<nail x="-620" y="-238"/>
+			<nail x="-620" y="-59"/>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id18"/>
+			<label kind="assignment" x="111" y="43">direction := 3</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id18"/>
+			<label kind="assignment" x="77" y="-33">direction := 2</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id18"/>
+			<label kind="assignment" x="85" y="-84">direction := 1</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id8"/>
+			<label kind="probability" x="26" y="35">1</label>
+		</transition>
+		<transition>
+			<source ref="id19"/>
+			<target ref="id9"/>
+			<label kind="probability" x="26" y="-25">1</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id19"/>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id10"/>
+			<label kind="probability" x="-76" y="-42">2</label>
+		</transition>
+		<transition>
+			<source ref="id20"/>
+			<target ref="id11"/>
+			<label kind="probability" x="-68" y="-118">1</label>
+		</transition>
+		<transition>
+			<source ref="id17"/>
+			<target ref="id20"/>
+			<label kind="guard" x="-212" y="-51">spawnLoc != 0</label>
+		</transition>
+		<transition>
+			<source ref="id15"/>
+			<target ref="id17"/>
+			<label kind="assignment" x="-391" y="-204">spawnLoc := 1</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id17"/>
+			<label kind="assignment" x="-391" y="-119">spawnLoc := 2</label>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id17"/>
+			<label kind="assignment" x="-365" y="34">spawnLoc := 4</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id17"/>
+			<label kind="assignment" x="-391" y="-59">spawnLoc := 3</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id12"/>
+			<label kind="probability" x="-442" y="-25">1</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id13"/>
+			<label kind="probability" x="-459" y="34">1</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id14"/>
+			<label kind="probability" x="-467" y="-118">1</label>
+		</transition>
+		<transition>
+			<source ref="id21"/>
+			<target ref="id15"/>
+			<label kind="probability" x="-467" y="-204">1</label>
+		</transition>
+		<transition>
+			<source ref="id16"/>
+			<target ref="id21"/>
+			<label kind="select" x="-569" y="-102">e:id_t</label>
+			<label kind="synchronisation" x="-569" y="-85">appr[e]?</label>
+		</transition>
+	</template>
+	<template>
+		<name>CentralComSys</name>
+		<declaration>// Place local declarations here.
+
+</declaration>
+		<location id="id22" x="-2439" y="-2464">
+			<name x="-2431" y="-2490">Allow_Passage</name>
+		</location>
+		<location id="id23" x="-2082" y="-2515">
+			<name x="-2092" y="-2549">Drive_West</name>
+		</location>
+		<location id="id24" x="-2031" y="-2600">
+			<name x="-2048" y="-2634">Drive_East</name>
+		</location>
+		<location id="id25" x="-2082" y="-2685">
+			<name x="-2116" y="-2719">Drive_South</name>
+		</location>
+		<location id="id26" x="-2269" y="-2541">
+			<name x="-2252" y="-2558">Drive_North</name>
+		</location>
+		<location id="id27" x="-2269" y="-2660">
+			<name x="-2303" y="-2694">Car_Arrival</name>
+		</location>
+		<location id="id28" x="-2439" y="-2660">
+			<name x="-2448" y="-2702">Registering_Car</name>
+		</location>
+		<init ref="id28"/>
+		<transition>
+			<source ref="id26"/>
+			<target ref="id22"/>
+			<label kind="select" x="-2261" y="-2524">e:id_t</label>
+			<label kind="synchronisation" x="-2261" y="-2507">go[e]!</label>
+			<nail x="-2269" y="-2464"/>
+			<nail x="-2405" y="-2464"/>
+			<nail x="-2405" y="-2464"/>
+			<nail x="-2414" y="-2464"/>
+			<nail x="-2422" y="-2464"/>
+		</transition>
+		<transition>
+			<source ref="id23"/>
+			<target ref="id22"/>
+			<label kind="select" x="-2048" y="-2515">e:id_t</label>
+			<label kind="synchronisation" x="-2048" y="-2498">go[e]!</label>
+			<nail x="-2057" y="-2464"/>
+			<nail x="-2405" y="-2464"/>
+			<nail x="-2414" y="-2464"/>
+		</transition>
+		<transition>
+			<source ref="id24"/>
+			<target ref="id22"/>
+			<label kind="select" x="-1963" y="-2592">e:id_t</label>
+			<label kind="synchronisation" x="-1963" y="-2575">go[e]!</label>
+			<nail x="-1972" y="-2600"/>
+			<nail x="-1972" y="-2464"/>
+			<nail x="-2405" y="-2464"/>
+			<nail x="-2405" y="-2464"/>
+			<nail x="-2414" y="-2464"/>
+		</transition>
+		<transition>
+			<source ref="id22"/>
+			<target ref="id28"/>
+		</transition>
+		<transition>
+			<source ref="id25"/>
+			<target ref="id22"/>
+			<label kind="select" x="-1963" y="-2677">e:id_t</label>
+			<label kind="synchronisation" x="-1963" y="-2660">go[e]!</label>
+			<nail x="-1972" y="-2685"/>
+			<nail x="-1972" y="-2464"/>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id23"/>
+			<label kind="select" x="-2125" y="-2592">e:id_t</label>
+			<label kind="guard" x="-2125" y="-2575">list[e] == 3</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id24"/>
+			<label kind="select" x="-2125" y="-2660">e:id_t</label>
+			<label kind="guard" x="-2125" y="-2643">list[e] == 2</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id25"/>
+			<label kind="select" x="-2201" y="-2711">e:id_t</label>
+			<label kind="guard" x="-2201" y="-2694">list[e] == 1</label>
+		</transition>
+		<transition>
+			<source ref="id27"/>
+			<target ref="id26"/>
+			<label kind="select" x="-2261" y="-2609">e:id_t</label>
+			<label kind="guard" x="-2261" y="-2592">list[e] == 4</label>
+		</transition>
+		<transition>
+			<source ref="id28"/>
+			<target ref="id27"/>
+			<label kind="select" x="-2346" y="-2660">e:id_t</label>
+			<label kind="synchronisation" x="-2346" y="-2643">stop[e]!</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+
+// List one or more processes to be composed into a system.
+system Car, directionAssignment, CentralComSys;
+    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
