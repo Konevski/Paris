@@ -11,4 +11,6 @@
 
 - sequence_diagram_SingleCar.jpeg - Wiktor
 - Intersection Flow Chart.png - Wiktor
--Intersection Use case.png - Wiktor
+- Intersection Use case.png - Wiktor
+- Intersection Activity Diagram.png - Wiktor
+- Intersection Sequence Diagram.png - Wiktor
