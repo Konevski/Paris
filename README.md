@@ -7,7 +7,7 @@ we are developing an autonomus traffic intersection using a vehical to vehical a
 - It should be able to communicate with multiple vehicals at the same time
 - It should assign priority to the incoming vehicals
 - It should have a wide rage of detection
-- 
+ 
 ## vehicals:
 - It should autonomus
 - It should communicate with the intersection communiction infracture
